@@ -14,7 +14,8 @@ var CallYelp = function(){
       data: {
         callback: "cb",
         term: searchTerm ,
-        limit: 16,
+        offset:20,
+        sort:2,
         location: "San Francisco",
       }
     };
@@ -33,6 +34,21 @@ var CallYelp = function(){
         console.log(rating);
         var pix = (data.businesses[0].image_url);
         console.log(pix);
+        var source = $("#search-template").html();
+        console.log("source"+source);
+        console.log("surce ends");
+        var template = Handlebars.compile(source);
+        console.log("template hiii"+template);
+        var html = template({yelpData:data});
+        console.log("html"+html);
+        $("#searchPage").html(html);
+        $(".check-size").each(function(){
+        if(($(this).text().length) > 25){
+          $(this).css("fontSize","16px");
+        }else{
+        $(this).css("fontSize","20px");
+        }});
+        $("#comparator").html();
       }
     }); //end ajax call
   }); 
