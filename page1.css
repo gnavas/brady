@@ -1,0 +1,8 @@
+.backgroundImage, body, html{
+  background: url(https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQJgeZkuIL1WY0wXHT1euKkjGk81zI3L44_b38sNC5IRMlZx9_6 ) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+}
