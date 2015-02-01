@@ -4,6 +4,10 @@ var Brady = function(){
   this.callyelp = new CallYelp();
 };
 
+var SubmitListener = function(){
+  console.log("BRADDDDDDY");
+};
+
 var CallYelp = function(){
  function press(){
   $("form").submit(function(e){
@@ -48,7 +52,6 @@ var CallYelp = function(){
         }else{
         $(this).css("fontSize","20px");
         }});
-        $("#comparator").html();
       }
     }); //end ajax call
   }); 
@@ -68,6 +71,8 @@ var token = {
 };
 
 press();
+this.CallYelp = new SubmitListener();
 };
 Brady();
+
 });

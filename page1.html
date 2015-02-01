@@ -72,13 +72,38 @@
 </div>
 <script id="search-template" type="text/x-handlebars-template">
   <div class="row well" style = "margin-top:50px">
-    <div id = "comparator">
+  <div>
+    <div>
+    <div class="col-sm-1">
+      <img src={{yelpData.businesses.0.image_url}}>
+    </div>
+    <div class="col-sm-2" style="height:105px; width:325px;">
+      <h1 class="check-size" style="font-size:10px;">{{yelpData.businesses.0.name}}</h1>
+      <p><img src={{yelpData.businesses.0.rating_img_url_small}}></p>
+       <button>Remove</button>
     </div>
   </div>
-
-
-
-  <div class="row well well-large" style = "margin-top:50px">
+   <div class="col-sm-1">
+      <img src={{yelpData.businesses.1.image_url}}>
+    </div>
+    <div class="col-sm-2" style="height:105px; width:325px;">
+      <h1 class="check-size" style="font-size:10px;">{{yelpData.businesses.1.name}}</h1>
+      <p><img src={{yelpData.businesses.1.rating_img_url_small}}></p>
+     <button>Remove</button>
+    </div>
+  </div>
+   <div class="col-sm-1">
+      <img src={{yelpData.businesses.2.image_url}}>
+    </div>
+    <div class="col-sm-2" style="height:105px; width:325px;">
+      <h1 class="check-size" style="font-size:10px;">{{yelpData.businesses.2.name}}</h1>
+      <p><img src={{yelpData.businesses.2.rating_img_url_small}}></p>
+        <button>Remove</button>
+    </div>
+  </div>
+  </div>
+  </div>
+<div class="row well well-large" style = "margin-top:50px">
    {{#each yelpData.businesses}}
   <div>
     <div class="col-sm-1">
@@ -88,12 +113,12 @@
       <h1 class="check-size" style="font-size:10px;">{{name}}</h1>
       <p><img src={{rating_img_url_small}}></p>
       <form>
-        <label for="checker">Compare?</label>
+        <label for="checker">Compare</label>
         <input id="checker" type="checkbox">
       </form>
     </div>
+     </div>
     {{/each}} 
-  </div>
   </div> 
 </script>
 </div><!-- /.container-fluid -->
