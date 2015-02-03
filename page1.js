@@ -16,20 +16,35 @@ $( document ).ready( function(){
     });
     $("body").delegate(".check","click",function(e){ //set listener on check boxes//
       var boxCheck = this;
-      var thisData = $(this).parent().parent().parent().parent().html();
-      // if ($(this).attr("checked") === "checked") {
-      //   $(this).removeAttr("checked"); //setting attribute to keep track of checked/unchechekd boxes//
-      // }else{$(this).attr("checked","checked");
+      var checkData = $(this).parent().parent().parent().parent().html();
+      console.log("Hello There"+thisData);
+      var crazy = $(checkData).find(".check").attr("checked");
+    console.log("thiscrazzzy",crazy);
+    if(crazy === "checked"){
+      console.log(true);
+    }else{console.log(false);
+    }
+     var clickName = $(checkData).find("h1").text();
+     var topRow = $(".size_check").eq(1).text();
+     console.log(topRow);
+     console.log("Naezzzzz");
+    me.toggleBoxChecker(boxCheck,me);
 
-      // }
-      me.toggleBoxChecker(boxCheck);
-      me.rotate(thisData);
+    if(crazy === "checked"){
+       me.removeCompare(clickName);
+      console.log(true);
+    }else{console.log(false);
+       me.rotate(checkData,me,thisData);
+    }
+    // me.removeCompare(clickName);
+    // me.rotate(thisData);
+      // me.removeComparator(boxCheck);
     });
-    me.rotate(thisData);
-      console.log("hiiiii");
-      console.log(thisData);
+    // me.rotate(thisData);
+    //   console.log("hiiiii");
+    //   console.log(thisData);
   };
-  SubmitListener.prototype.toggleBoxChecker=function(boxCheck){
+  SubmitListener.prototype.toggleBoxChecker=function(boxCheck,me){
 if ($(boxCheck).attr("checked") === "checked") {
         $(boxCheck).removeAttr("checked"); //setting attribute to keep track of checked/unchechekd boxes//
       }else{$(boxCheck).attr("checked","checked");
@@ -44,7 +59,7 @@ if ($(boxCheck).attr("checked") === "checked") {
       var pDiv = $(this).parent().next();
       var formEl = $(pDiv).children().last();
       var checkEl = $(formEl).children().last();
-      console.log(checkEl);
+      console.log("checkEl",checkEl);
       if(($(this).text())===title){
         console.log("Brady");
         $(checkEl).removeAttr("checked");
@@ -55,15 +70,51 @@ if ($(boxCheck).attr("checked") === "checked") {
   $(removeBut).parent().parent().attr("class","empty");
   $(removeBut).parent().parent().html("<div class='col-md-3'></div>");
   };
+  SubmitListener.prototype.removeCompare= function (clickName){
+    console.log("Made it to remove compare");
+    console.log(topLeft);
+    console.log(clickName);
+    console.log("End of made it to remvoe compare");
+  var topLeft = $(".size_check").first().text();
+  var topRight = $(".size_check").last().text();
+  var topMiddle = $(".size_check").eq(1).text();
+    console.log(topLeft);
+    console.log(clickName);
+    console.log("End of made it to remvoe compare");
+  if(clickName === topLeft) {
+ $(".size_check").first().parent().parent().attr("class","empty");
+ $(".size_check").first().parent().parent().html("<div class='col-md-3'></div>");
+ 
+}
+if(clickName === topRight) {
+ $(".size_check").last().parent().parent().attr("class","empty");
+ $(".size_check").last().parent().parent().html("<div class='col-md-3'></div>");
+ 
+}
+  if(clickName === topMiddle) {
+ $(".size_check").eq(1).parent().parent().attr("class","empty");
+ $(".size_check").eq(1).parent().parent().html("<div class='col-md-3'></div>");
+ 
+}
 
-  SubmitListener.prototype.rotate = function(thisData){
-    console.log("Made it to checkbox listener");
-    console.log(thisData);
-    var mainPic = $(thisData).find("img").first().attr("src");
+};
+
+  SubmitListener.prototype.rotate = function(checkData,me,thisData){
+    var changeFirst = $("#first");
+    var changeSecond = $("#second");
+    var changeThird = $("#third");
+    var first = $("#first").html();
+    var second = $("#second").html();
+    var third = $("#third").html();
+    var uncheckThird = $(".check").last();
+    console.log("Brady Flakes",uncheckThird);
+    console.log("Made it to ROTATE THIS DATA");
+    console.log(checkData);
+    var mainPic = $(checkData).find("img").first().attr("src");
     console.log(mainPic);
-    var ratingPic = $(thisData).find("p").find("img").attr("src");
+    var ratingPic = $(checkData).find("p").find("img").attr("src");
     console.log(ratingPic);
-    var title = $(thisData).find("h1").text();
+    var title = $(checkData).find("h1").text();
     // $(".empty").first().html(thisData);
      var source = $("#replace-template").html();
       var template = Handlebars.compile(source);
@@ -72,14 +123,52 @@ if ($(boxCheck).attr("checked") === "checked") {
         ratingPic:ratingPic,
         title:title,
       });
-      $(".empty").parent().html(html);
+      if($(".empty")[0]){
+      $(".empty").first().parent().html(html);
 
       $(".size_check").each(function(){
-            if(($(this).text().length) > 25){
+            if(($(this).text().length) < 23){
               $(this).css("fontSize","16px");
+            }if(($(this).text().length)<15){
+              $(this).css("fontSize","18px");
             }else{
-              $(this).css("fontSize","20px");
+              $(this).css("fontSize","14px");
             }});
+    }else{
+      console.log("lalalalalallalalalalalalalalallalalalal - George");
+      console.log(first);
+      console.log(second);
+      console.log(third);
+    $(changeFirst).html(html);
+    $(changeSecond).html(first);
+    me.removeThird(checkData,thisData);
+    $(changeThird).html(second);
+    }
+  };
+
+  SubmitListener.prototype.removeThird = function(checkData,thisData){
+console.log("I made it to fucking removeThird");
+console.log(thisData);
+var topRight = $(".size_check").last().text();
+console.log(topRight);
+var clickName = $('p');
+console.log(clickName);
+
+ $(".check-size").each(function(){
+      var pDiv = $(this).parent().next();
+      var formEl = $(pDiv).children().last();
+      var checkEl = $(formEl).children().last();
+      console.log("checkEl",checkEl);
+      if(($(this).text())===topRight){
+        console.log("Brady");
+        $(checkEl).removeAttr("checked");
+      }
+          });
+// // clickName.forEach(function(x){
+// if(($(x).text()) === topRight){
+// console.log("Holy Fucking Shit this sucks");
+// }
+// });
   };
 
   var CallYelp = function(){
@@ -160,16 +249,20 @@ press();
 
 CallYelp.prototype.checkText = function(){
  $(".check-size").each(function(){
-            if(($(this).text().length) > 20){
+            if(($(this).text().length)<23){
               $(this).css("fontSize","16px");
+            }if(($(this).text().length)<15){
+              $(this).css("fontSize","18px");
             }else{
-              $(this).css("fontSize","20px");
+              $(this).css("fontSize","14px");
             }});
  $(".size_check").each(function(){
-            if(($(this).text().length) > 20){
+            if(($(this).text().length) < 23){
               $(this).css("fontSize","16px");
+            }if(($(this).text().length)<15){
+              $(this).css("fontSize","18px");
             }else{
-              $(this).css("fontSize","20px");
+              $(this).css("fontSize","14px");
             }});
 };
 Brady();
