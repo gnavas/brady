@@ -16,16 +16,18 @@ $( document ).ready( function(){
     });
     $("body").delegate(".check","click",function(e){ //set listener on check boxes//
       var boxCheck = this;
-      var thisData = $(this).parent().parent().parent().html();
+      var thisData = $(this).parent().parent().parent().parent().html();
       // if ($(this).attr("checked") === "checked") {
       //   $(this).removeAttr("checked"); //setting attribute to keep track of checked/unchechekd boxes//
       // }else{$(this).attr("checked","checked");
 
       // }
-      me.rotate(thisData);
       me.toggleBoxChecker(boxCheck);
+      me.rotate(thisData);
     });
-   
+    me.rotate(thisData);
+      console.log("hiiiii");
+      console.log(thisData);
   };
   SubmitListener.prototype.toggleBoxChecker=function(boxCheck){
 if ($(boxCheck).attr("checked") === "checked") {
@@ -56,8 +58,11 @@ if ($(boxCheck).attr("checked") === "checked") {
 
   SubmitListener.prototype.rotate = function(thisData){
     console.log("Made it to checkbox listener");
+    console.log(thisData);
     var mainPic = $(thisData).find("img").first().attr("src");
+    console.log(mainPic);
     var ratingPic = $(thisData).find("p").find("img").attr("src");
+    console.log(ratingPic);
     var title = $(thisData).find("h1").text();
     // $(".empty").first().html(thisData);
      var source = $("#replace-template").html();
@@ -69,7 +74,7 @@ if ($(boxCheck).attr("checked") === "checked") {
       });
       $(".empty").parent().html(html);
 
-      $(".check-size").each(function(){
+      $(".size_check").each(function(){
             if(($(this).text().length) > 25){
               $(this).css("fontSize","16px");
             }else{

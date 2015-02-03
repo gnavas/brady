@@ -66,16 +66,17 @@
 </div>
 </div><!-- /.container-fluid -->
 <script id="replace-template" type="text/x-handlebars-template">
-  <div class="selected">
-    <div class = "col-md-1">
-      <img src={{mainPic}}>
+      <div class = "selected row">
+        <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
+          <img src={{mainPic}}>
+        </div>
+        <div class = "col-xs-8 col-md-8 col-sm-8 col-lg-8">
+          <h1 class = "size_check" style="font-size:16px;">{{title}}</h1>
+          <p><img src={{ratingPic}}></p>
+          <button class ="removeButton">Remove</button>
+        </div>
     </div>
-    <div class = "col-md-2" style="height:105px; width:325px;">
-      <h1 class="size_check" style="font-size:16px;">{{title}}</h1>
-      <p><img src={{ratingPic}}></p>
-      <button class ="removeButton">Remove</button>
     </div>
-  </div>
 </script>
 <script id="search-template" type="text/x-handlebars-template">
   <div id = "compareRow" class="row well well-large"  style = "margin-top:50px">
