@@ -39,9 +39,10 @@ if ($(boxCheck).attr("checked") === "checked") {
     var parentDiv = $(removeBut).parent();
     var title = $(parentDiv).find(">:first-child").text();
      $(".check-size").each(function(){
-      var pDiv = $(this).parent();
+      var pDiv = $(this).parent().next();
       var formEl = $(pDiv).children().last();
       var checkEl = $(formEl).children().last();
+      console.log(checkEl);
       if(($(this).text())===title){
         console.log("Brady");
         $(checkEl).removeAttr("checked");
@@ -102,6 +103,25 @@ if ($(boxCheck).attr("checked") === "checked") {
         dataType: "jsonp",
         jsonpCallback: "cb",
         success: function (data) {
+          var counter = -1 ;
+         data.businesses.forEach(function(x){
+            counter= counter+1;
+            console.log(counter);
+            if (counter%3===0){
+              x.isFourth = true;
+            }else{
+              x.isFourth = false;
+            }
+
+          });
+      
+          // add a property called isFourth, this is true or false
+          // loop over the data.businesses array 
+          // if the index
+          // data.businesses.forEach(function(val,index){
+              // if index % 4 === 0 
+              // data.businesses[index].isFourth = true
+          // })
           console.log(data);
           var source = $("#search-template").html();
           var template = Handlebars.compile(source);
@@ -135,6 +155,12 @@ press();
 
 CallYelp.prototype.checkText = function(){
  $(".check-size").each(function(){
+            if(($(this).text().length) > 20){
+              $(this).css("fontSize","16px");
+            }else{
+              $(this).css("fontSize","20px");
+            }});
+ $(".size_check").each(function(){
             if(($(this).text().length) > 20){
               $(this).css("fontSize","16px");
             }else{
