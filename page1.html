@@ -3,14 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
-	<link rel="stylesheet" type="text/css" href="page1.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" type="text/css" href="page1.css">
 
 </head>
 <body>
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid" style="background-color:silver;">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header" style = "color:blue;">
@@ -41,7 +41,8 @@
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
-    <div id = "searchPage" >
+    <div id = "searchPage">
+    <div class = "jumbotron" style = "background-color:silver;"> <!-- class="jumbotron" -->
       <div style = "color:white; background-color:silver;" class="row">
         <form background-color:silver;>
           <div>
@@ -66,20 +67,20 @@
 </div>
 </div><!-- /.container-fluid -->
 <script id="replace-template" type="text/x-handlebars-template">
-      <div class = "selected row">
-        <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
-          <img src={{mainPic}}>
-        </div>
-        <div class = "col-xs-8 col-md-8 col-sm-8 col-lg-8">
-          <h1 class = "size_check" style="font-size:16px;">{{title}}</h1>
-          <p><img src={{ratingPic}}></p>
-          <button class ="removeButton">Remove</button>
-        </div>
+  <div class = "selected row">
+    <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
+      <img src={{mainPic}}>
     </div>
+    <div class = "col-xs-8 col-md-8 col-sm-8 col-lg-8">
+      <h1 class = "size_check" style="font-size:16px;">{{title}}</h1>
+      <p><img src={{ratingPic}}></p>
+      <button class ="removeButton">Remove</button>
     </div>
+  </div>
+</div>
 </script>
 <script id="search-template" type="text/x-handlebars-template">
-  <div id = "compareRow" class="row well well-large"  style = "margin-top:50px">
+  <div id = "compareRow" class="row well well-large"  style = "margin-top:50px; position:fixed">
     <div id="first" class ="col-xs-4 col-md-4 col-sm-4 col-lg-4">
       <div class = "selected row">
         <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
@@ -118,7 +119,7 @@
     </div>
   </div>
   <div class = " row text-center">
-    <button class="btn btn-primary btn-lg" type="submit">Compare!</button>
+    <button class=" compareButton btn btn-primary btn-lg" type="submit">Compare!</button>
   </div>
   {{#each yelpData.businesses}}
 
@@ -142,18 +143,92 @@
           <input class="check" type="checkbox">
         </form>
       </div>
+    </div>
   </div>
-</div>
 </div>
 {{/each}} 
 </div> 
 </script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
-<script src="yelp_auth.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
-<script type="text/javascript" src="page1.js"></script>
+<script id="showone-template" type="text/x-handlebars-template">
+  <div class="row well well-large" style = "margin-top:50px">
+    {{#each compareArr}}
+    {{#if isThree}}
+</div>     
+</div>     
+<div id ="Hello One" class="row well well-large" style = "margin-top:50px">
+  <div class ="row">
+  <div class = "col-md-offset-3 col-xs-6 col-md-6 col-sm-6 col-lg-6">
+  {{/if}}
+  {{#if isNotThree}}
+         <div class ="row">
+
+    <div class = "col-xs-6 col-md-6 col-sm-6 col-lg-6">
+    {{/if}}
+        <div class ="row">
+       <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
+        <h1 class="title">{{name}}</h1>
+        <p>{{display_phone}}</p>
+        <div class = "largeImage">
+          <img class = "bizImage" src={{image_url}}>
+          <img src={{rating_img_url}}>
+        </div>   
+          </div> 
+        <div id ="description" class="col-xs-8 col-md-8 col-sm-8 col-lg-8">
+          <p>Address: {{location.display_address}}</p>
+          <p>Neightborhood: {{location.neighborhoods}}</p>
+          <p>Top Review: {{snippet_text}}</p>
+          <p>Yelp Page: <a href="{{url}}">{{url}}</a></p>
+        </div>  
+      </div>  
+    </div>    
+    {{/each}}      
+</script>
+<!-- <script id="showtwo-template" type="text/x-handlebars-template">
+<div class = "col-xs-6 col-md-6 col-sm-6 col-lg-6">
+<div class = "col-xs-12 col-md-12 col-sm-12 col-lg-12">
+   <div class ="row">
+     <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
+      <h1 class="title">{{bizData.name}}</h1>
+       <p>{{bizData.display_phone}}</p>
+      <div class = "largeImage">
+      <img class = "bizImage" src={{bizData.image_url}}>
+      </div>
+     <img src={{bizData.rating_img_url}}>
+    </div>
+    <div id ="description" class="col-xs-8 col-md-8 col-sm-8 col-lg-8">
+        <p>Address: {{bizData.location.display_address}}</p>
+        <p>Neightborhood: {{bizData.location.neighborhoods}}</p>
+        <p>Top Review: {{bizData.snippet_text}}</p>
+        <p>Yelp Page: {{bizData.url}}</p>
+    </div>
+   </div>  
+</script>
+<script id="showthree-template" type="text/x-handlebars-template">
+<div class = "col-xs-6 col-md-6 col-sm-6 col-lg-6">
+<div class = "col-xs-12 col-md-12 col-sm-12 col-lg-12">
+   <div class ="row">
+     <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
+      <h1 class="title">{{bizData.name}}</h1>
+       <p>{{bizData.display_phone}}</p>
+      <div class = "largeImage">
+      <img class = "bizImage" src={{bizData.image_url}}>
+      </div>
+     <img src={{bizData.rating_img_url}}>
+    </div>
+    <div id ="description" class="col-xs-8 col-md-8 col-sm-8 col-lg-8">
+        <p>Address: {{bizData.location.display_address}}</p>
+        <p>Neightborhood: {{bizData.location.neighborhoods}}</p>
+        <p>Top Review: {{bizData.snippet_text}}</p>
+        <p>Yelp Page: {{bizData.url}}</p>
+    </div>
+   </div>  
+ </script> -->
+ <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.js"></script>
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js"></script>
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+ <script src="yelp_auth.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+ <script type="text/javascript" src="page1.js"></script>
 
 </body>
 </html>

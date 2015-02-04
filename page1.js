@@ -5,45 +5,88 @@ $( document ).ready( function(){
     // this.submitlistener = new SubmitListener();//initializes event listeners//
   };
 
-  var SubmitListener = function(thisData){
-    console.log("Made it to Submit Listener");
-    console.log(thisData);
+  var SubmitListener = function(thisData,masterArr){
+    console.log("Made it to SubmitListener");
+    console.log(masterArr);
     var me = this; //enables me to reference SubmitListener below//
     $("body").delegate(".removeButton","click",function(e){ //set click listener on remove button//
     var removeBut = this;
     me.removeComparator(removeBut);
     me.removeBoxStateChecker(removeBut,thisData);
     });
+    $("body").delegate(".compareButton","click",function(e){ //set click listener on compare button//
+    // var submitClick = this;
+    me.compareWhat(thisData,masterArr,me);
+    // me.callyelpbiz = new CallYelpBiz();
+    // me.compare(thisData,submitClick);
+    });
     $("body").delegate(".check","click",function(e){ //set listener on check boxes//
       var boxCheck = this;
       var checkData = $(this).parent().parent().parent().parent().html();
-      console.log("Hello There"+thisData);
       var crazy = $(checkData).find(".check").attr("checked");
-    console.log("thiscrazzzy",crazy);
-    if(crazy === "checked"){
-      console.log(true);
-    }else{console.log(false);
-    }
      var clickName = $(checkData).find("h1").text();
      var topRow = $(".size_check").eq(1).text();
-     console.log(topRow);
-     console.log("Naezzzzz");
-    me.toggleBoxChecker(boxCheck,me);
-
+     me.toggleBoxChecker(boxCheck,me);
     if(crazy === "checked"){
        me.removeCompare(clickName);
-      console.log(true);
-    }else{console.log(false);
-       me.rotate(checkData,me,thisData);
+    }else{me.rotate(checkData,me,thisData);
     }
-    // me.removeCompare(clickName);
-    // me.rotate(thisData);
-      // me.removeComparator(boxCheck);
     });
-    // me.rotate(thisData);
-    //   console.log("hiiiii");
-    //   console.log(thisData);
   };
+
+  SubmitListener.prototype.compareWhat = function(thisData,masterArr,me){
+  var topLeft = $(".size_check").first().text();
+  var topRight = $(".size_check").last().text();
+  var topMiddle = $(".size_check").eq(1).text();
+  var counter = 0;
+  var compareArr = [];
+  // console.log(topLeft);
+  // console.log(topRight);
+  // console.log(topMiddle);
+// console.log(masterArr[0][0]);
+// console.log(masterArr[0][1]);
+masterArr.forEach(function(x){
+if((x[0] === topLeft) || (x[0]=== topRight) || (x[0]===topMiddle)){
+  var id = x[1];
+  counter++; 
+  // console.log("id",id);
+  me.callyelpbiz = new CallYelpBiz(id,me,compareArr,counter);
+}
+});
+// masterArr.forEach(function(){
+//   var re = /apples/gi;
+// var str = 'Apples are round, and apples are juicy.';
+// var newstr = str.replace(re, 'oranges');
+// console.log(newstr);  // oranges are round, and oranges are juicy
+
+// });
+  };
+  SubmitListener.prototype.compareFirst = function(data,compareArr){
+    console.log("comparearr Harboug",compareArr);
+    // console.log("name0",compareArr[0].name);
+    // console.log("name1",compareArr[1].name);
+    // console.log("name2",compareArr[2].name);
+
+  var source = $("#showone-template").html();
+  var template = Handlebars.compile(source);
+  var html = template({compareArr:compareArr});
+    $("#searchPage").html(html);
+
+  };
+  //   SubmitListener.prototype.compareSecond = function(data,compareArr){
+  // var source = $("#showone-template").html();
+  // var template = Handlebars.compile(source);
+  // var html = template({bizData:data});
+  //   $("#compareSecond").html(html);
+
+  // };
+  //   SubmitListener.prototype.compareThird = function(data,compareArr){
+  // var source = $("#showone-template").html();
+  // var template = Handlebars.compile(source);
+  // var html = template({bizData:data});
+  //   $("#compareThird").html(html);
+
+  // };
   SubmitListener.prototype.toggleBoxChecker=function(boxCheck,me){
 if ($(boxCheck).attr("checked") === "checked") {
         $(boxCheck).removeAttr("checked"); //setting attribute to keep track of checked/unchechekd boxes//
@@ -51,17 +94,13 @@ if ($(boxCheck).attr("checked") === "checked") {
       }
   };
   SubmitListener.prototype.removeBoxStateChecker=function(removeBut,thisData){
-    console.log("Made it to removeBOxStateChecker");
-    console.log(thisData);
     var parentDiv = $(removeBut).parent();
     var title = $(parentDiv).find(">:first-child").text();
      $(".check-size").each(function(){
       var pDiv = $(this).parent().next();
       var formEl = $(pDiv).children().last();
       var checkEl = $(formEl).children().last();
-      console.log("checkEl",checkEl);
       if(($(this).text())===title){
-        console.log("Brady");
         $(checkEl).removeAttr("checked");
       }
           });
@@ -71,16 +110,9 @@ if ($(boxCheck).attr("checked") === "checked") {
   $(removeBut).parent().parent().html("<div class='col-md-3'></div>");
   };
   SubmitListener.prototype.removeCompare= function (clickName){
-    console.log("Made it to remove compare");
-    console.log(topLeft);
-    console.log(clickName);
-    console.log("End of made it to remvoe compare");
   var topLeft = $(".size_check").first().text();
   var topRight = $(".size_check").last().text();
   var topMiddle = $(".size_check").eq(1).text();
-    console.log(topLeft);
-    console.log(clickName);
-    console.log("End of made it to remvoe compare");
   if(clickName === topLeft) {
  $(".size_check").first().parent().parent().attr("class","empty");
  $(".size_check").first().parent().parent().html("<div class='col-md-3'></div>");
@@ -107,18 +139,12 @@ if(clickName === topRight) {
     var second = $("#second").html();
     var third = $("#third").html();
     var uncheckThird = $(".check").last();
-    console.log("Brady Flakes",uncheckThird);
-    console.log("Made it to ROTATE THIS DATA");
-    console.log(checkData);
     var mainPic = $(checkData).find("img").first().attr("src");
-    console.log(mainPic);
     var ratingPic = $(checkData).find("p").find("img").attr("src");
-    console.log(ratingPic);
     var title = $(checkData).find("h1").text();
-    // $(".empty").first().html(thisData);
-     var source = $("#replace-template").html();
-      var template = Handlebars.compile(source);
-      var html = template({
+    var source = $("#replace-template").html();
+    var template = Handlebars.compile(source);
+    var html = template({
         mainPic:mainPic,
         ratingPic:ratingPic,
         title:title,
@@ -135,10 +161,6 @@ if(clickName === topRight) {
               $(this).css("fontSize","14px");
             }});
     }else{
-      console.log("lalalalalallalalalalalalalalallalalalal - George");
-      console.log(first);
-      console.log(second);
-      console.log(third);
     $(changeFirst).html(html);
     $(changeSecond).html(first);
     me.removeThird(checkData,thisData);
@@ -146,21 +168,16 @@ if(clickName === topRight) {
     }
   };
 
-  SubmitListener.prototype.removeThird = function(checkData,thisData){
-console.log("I made it to fucking removeThird");
-console.log(thisData);
+SubmitListener.prototype.removeThird = function(checkData,thisData){
+
 var topRight = $(".size_check").last().text();
-console.log(topRight);
 var clickName = $('p');
-console.log(clickName);
 
  $(".check-size").each(function(){
       var pDiv = $(this).parent().next();
       var formEl = $(pDiv).children().last();
       var checkEl = $(formEl).children().last();
-      console.log("checkEl",checkEl);
       if(($(this).text())===topRight){
-        console.log("Brady");
         $(checkEl).removeAttr("checked");
       }
           });
@@ -179,6 +196,7 @@ console.log(clickName);
       var searchTerm = $("#rest").val();
       var currentAdress = $("#addr").val();
       var request_data = {
+        // url:"http://api.yelp.com/v2/business/cinco-de-mayo-taqueria-san-francisco",
         url: "http://api.yelp.com/v2/search",
         method: "GET",
         data: {
@@ -208,15 +226,7 @@ console.log(clickName);
             }
 
           });
-      
-          // add a property called isFourth, this is true or false
-          // loop over the data.businesses array 
-          // if the index
-          // data.businesses.forEach(function(val,index){
-              // if index % 4 === 0 
-              // data.businesses[index].isFourth = true
-          // })
-          console.log(data);
+
           var source = $("#search-template").html();
           var template = Handlebars.compile(source);
           var html = template({yelpData:data});
@@ -225,7 +235,8 @@ console.log(clickName);
           $(".check:eq(1)").attr("checked","true");
           $(".check:eq(2)").attr("checked","true");
           me.checkText();
-          me.submitlistener = new SubmitListener(data);
+          me.pushIds(data,me);
+          // me.submitlistener = new SubmitListener(data);
         }
     }); //end ajax call
 }); 
@@ -245,8 +256,91 @@ var token = {
 };
 
 press();  
+};//end of Call Yelp 1//
+ var CallYelpBiz = function(id,me,compareArr,counter){
+  // console.log("made it to yelpbiz");
+  // console.log(id);
+
+//   var re = /apples/gi;
+// var str = 'Apples are round, and apples are juicy.';
+// var newstr = str.replace(re, 'oranges');
+// console.log(newstr);  // oranges are round, and oranges are juicy
+    // var me = this;
+   function press(id, compareArr,counter){
+    console.log("idcheck",id);
+    var callName = id.replace(/[^A-z]/gi,"");
+      var request_data = {
+        url:"http://api.yelp.com/v2/business/"+id,
+        method: "GET",
+        data: {
+          callback: callName,
+        }
+      };
+      $.ajax({
+        url: request_data.url,
+        type: request_data.method,
+        cache: true,
+        data: oauth.authorize(request_data, token),
+        dataType: "jsonp",
+        jsonpCallback: callName,
+        success: function (data) {
+         // console.log(data);
+         // if (counter ===1) {
+        //   me.compareFirst(data,compareArr);
+        // }
+        // if (counter ===2) {
+        //   me.compareSecond(data,compareArr);
+        // }
+        // if (counter ===3) {
+        //   me.compareThird(data,compareArr);
+        // }
+          console.log(data);
+          compareArr.push(data);
+          if (compareArr.length ===3) {
+            compareArr[0].isNotThree = true;
+            compareArr[1].isNotThree = true;
+            compareArr[2].isThree = true;
+         me.compareFirst(data,compareArr);
+         // console.log("compareArr",compareArr);
+         // console.log("compareArr0",compareArr[0]);
+         // console.log("compareArr0",compareArr[0].name);
+         // console.log("name1",compareArr[1].name);
+         // console.log("name2",compareArr[2].name);
+        }}
+    }); //end ajax call to yelpbiz 
+}
+
+var oauth = OAuth({
+  consumer: {
+    public: "OeMC9uJnKChQ4Vqz7kW4jQ",
+    secret: "EerFBnhIlCJB3UZgF6IS_WfL6tk"
+  },
+  signature_method: "HMAC-SHA1"
+});
+
+var token = {
+  public: "cPyTFWBrMwTrIp2rrUIz8l5lDNDrza5g",
+  secret: "RK5dv-4Inlq-e5KQ6oaPUOiiIKg"
 };
 
+press(id,compareArr,counter);  
+};//end of yelpbiz call//
+
+CallYelp.prototype.pushIds = function(data,me){
+console.log(data);
+console.log(data.businesses);
+var masterArr = [];
+data.businesses.forEach(function(x){
+var arr=[x.name,x.id];
+console.log(arr);
+masterArr.push(arr);
+});
+console.log("Master Master",masterArr);
+console.log(masterArr[0]);
+console.log(masterArr[1]);
+console.log(masterArr[0][0]);
+me.submitlistener = new SubmitListener(data,masterArr);
+};
 CallYelp.prototype.checkText = function(){
  $(".check-size").each(function(){
             if(($(this).text().length)<23){
