@@ -1,10 +1,10 @@
-.backgroundImage, body, html{
+/*.backgroundImage, body, html{
   background: url(https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTSsROxazPLZuiLmhr7XLrsTsyq6xXlRyY9GN35it6nsDkNwnGJSQ) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-}
+}*/
 .largeImage{
 	height: 125px;
 	width: 150px;
@@ -20,6 +20,18 @@
 #description{
 	top:25px;
 }
+#bottom{
+	position:relative;
+	top:225px;
+	overflow:scroll;
+}
+
 #compareRow{
 	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	z-index: 999;
+	
 }
+
