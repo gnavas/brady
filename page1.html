@@ -153,14 +153,14 @@
 {{/each}} 
 </script>
 <script id="showone-template" type="text/x-handlebars-template">
-  <div class="row well well-large" style = "margin-top:50px">
+  <div id ="border"  class="row well well-large" style = "margin-top:50px">
     {{#each compareArr}}
     {{#if isThree}}
 </div>     
 </div>     
-<div id ="Hello One" class="row well well-large" style = "margin-top:50px">
+<div id ="HelloOne" class="row well well-large" style = "margin-top:50px">
   <div class ="row">
-  <div class = "col-md-offset-3 col-xs-6 col-md-6 col-sm-6 col-lg-6">
+  <div  class = "col-md-offset-3 col-xs-6 col-md-6 col-sm-6 col-lg-6">
   {{/if}}
   {{#if isNotThree}}
          <div class ="row">
@@ -168,7 +168,7 @@
     <div class = "col-xs-6 col-md-6 col-sm-6 col-lg-6">
     {{/if}}
         <div class ="row">
-       <div class="col-xs-5 col-md-5 col-sm-5 col-lg-5">
+       <div class="col-xs-3 col-md-3 col-sm-3 col-lg-3">
         <h1 class="title">{{name}}</h1>
         <p>{{display_phone}}</p>
         <div class = "largeImage">
@@ -176,7 +176,7 @@
           <img src={{rating_img_url}}>
         </div>   
           </div> 
-        <div id ="description" class="col-xs-7 col-md-7 col-sm-7 col-lg-7">
+        <div id ="description" class="col-xs-9 col-md-9 col-sm-9 col-lg-9">
           <p>Address: {{location.display_address}}</p>
           <p>Neightborhood: {{location.neighborhoods}}</p>
           <p>Top Review: {{snippet_text}}</p>
@@ -186,46 +186,6 @@
     </div>    
     {{/each}}      
 </script>
-<!-- <script id="showtwo-template" type="text/x-handlebars-template">
-<div class = "col-xs-6 col-md-6 col-sm-6 col-lg-6">
-<div class = "col-xs-12 col-md-12 col-sm-12 col-lg-12">
-   <div class ="row">
-     <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
-      <h1 class="title">{{bizData.name}}</h1>
-       <p>{{bizData.display_phone}}</p>
-      <div class = "largeImage">
-      <img class = "bizImage" src={{bizData.image_url}}>
-      </div>
-     <img src={{bizData.rating_img_url}}>
-    </div>
-    <div id ="description" class="col-xs-8 col-md-8 col-sm-8 col-lg-8">
-        <p>Address: {{bizData.location.display_address}}</p>
-        <p>Neightborhood: {{bizData.location.neighborhoods}}</p>
-        <p>Top Review: {{bizData.snippet_text}}</p>
-        <p>Yelp Page: {{bizData.url}}</p>
-    </div>
-   </div>  
-</script>
-<script id="showthree-template" type="text/x-handlebars-template">
-<div class = "col-xs-6 col-md-6 col-sm-6 col-lg-6">
-<div class = "col-xs-12 col-md-12 col-sm-12 col-lg-12">
-   <div class ="row">
-     <div class="col-xs-4 col-md-4 col-sm-4 col-lg-4">
-      <h1 class="title">{{bizData.name}}</h1>
-       <p>{{bizData.display_phone}}</p>
-      <div class = "largeImage">
-      <img class = "bizImage" src={{bizData.image_url}}>
-      </div>
-     <img src={{bizData.rating_img_url}}>
-    </div>
-    <div id ="description" class="col-xs-8 col-md-8 col-sm-8 col-lg-8">
-        <p>Address: {{bizData.location.display_address}}</p>
-        <p>Neightborhood: {{bizData.location.neighborhoods}}</p>
-        <p>Top Review: {{bizData.snippet_text}}</p>
-        <p>Yelp Page: {{bizData.url}}</p>
-    </div>
-   </div>  
- </script> -->
  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.js"></script>
  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha1.js"></script>
  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
