@@ -1,30 +1,78 @@
+(function (){
+
 $( document ).ready( function(){
 
-  var Brady = function(){
+  var Brady = function(searchCounter){
     var me = Brady;
+    me.SearchDropDownMenu = new SearchDropDownMenu();
+    if (searchCounter >5) {
+      searchCounter = 0;
+    }
      $("form").submit(function(e){
       e.preventDefault();
       var searchTerm = $("#rest").val();
+      console.log("searchTerm",searchTerm);
       var currentAddress = $("#addr").val();
+      console.log("currentAddress",currentAddress);
+      searchCounter ++;
       me.callyelp = new CallYelp(searchTerm,currentAddress);
-      me.StoreData = new StoreData(searchTerm,currentAddress,me);
+      me.StoreData = new StoreData(searchTerm,currentAddress,me,searchCounter);
 
     }); //initialize yelp call//
     // this.submitlistener = new SubmitListener();//initializes event listeners//
   };
 
-  var StoreData = function(searchTerm,currentAddress,me){
-  // var searchArr = [];
-  // searchArr.push(searchTerm,currentAddress);
-  // console.log("searchAR",searchArr);
-  
-  // window.localStorage.setItem("previousSearch",searchArr);
-  // var y = window.localStorage.getItem("previousSearch");
-  // console.log("y",y);
-  // searchTerm = y[0];
-  // currentAddress = y[1];
-  // console.log("check search",searchTerm);
-  // console.log("check add",currentAddress);
+  var SearchDropDownMenu = function(){
+    var showDrop = function() {
+    $("#previousSearchMenu").fadeIn(10);
+    };
+    var hideDrop = function(){
+    $("#previousSearchMenu").fadeOut(500);
+    };
+    $(".dropdown").hover(showDrop,hideDrop);
+
+  };
+
+ var StoreData = function(searchTerm,currentAddress,me,searchCounter){
+
+  var local = function(searchTerm,currentAddress){
+  searchArr =[];
+  searchArr.push([searchTerm,currentAddress]);
+  console.log("searchArr",searchArr);
+  searchArrMaster = JSON.parse(localStorage.getItem("searchHistory"));
+  if(searchArrMaster.length === 5){
+  searchArrMaster.shift();
+  }
+  searchArrMaster.push(searchArr);
+  localStorage.setItem("searchHistory", JSON.stringify(searchArrMaster));
+  console.log("searchArrMaster",searchArrMaster);
+  var searchOneResults = searchArrMaster[0];
+  var searchOneTerms = searchOneResults[0];
+  $("#search1").text(searchOneTerms[0]+" + "+searchOneTerms[1]);
+  var searchTwoResults = searchArrMaster[1];
+  var searchTwoTerms = searchTwoResults[0];
+  $("#search2").text(searchTwoTerms[0]+" + "+searchTwoTerms[1]);
+  var searchThreeResults = searchArrMaster[2];
+  var searchThreeTerms = searchThreeResults[0];
+  $("#search3").text(searchThreeTerms[0]+" + "+searchThreeTerms[1]);
+  var searchFourResults = searchArrMaster[3];
+  var searchFourTerms = searchFourResults[0];
+  $("#search4").text(searchFourTerms[0]+" + "+searchFourTerms[1]);
+  var searchFiveResults = searchArrMaster[4];
+  var searchFiveTerms = searchFiveResults[0];
+  $("#search5").text(searchFiveTerms[0]+" + "+searchFiveTerms[1]);
+
+};
+  if (localStorage.getItem("searchHistory") === null) {
+    console.log("I like dogs");
+  var searchArrMaster = [];
+  localStorage.setItem("searchHistory", JSON.stringify(searchArrMaster));
+  local(searchTerm,currentAddress);
+}  else{ {
+  local(searchTerm,currentAddress);
+}
+}
+
   this.backToSearch(searchTerm,currentAddress,me);
 
 };
@@ -38,16 +86,14 @@ $("body").delegate("#back","click",function(e){
 };
 
   var SubmitListener = function(thisData,masterArr){
-    console.log("Made it to submit listerner!!!!");
     var me = this; //enables me to reference SubmitListener below//
     function alpha(e){ //set click listener on remove button//
-      console.log("Made it to removebutton");
+
       var removeBut = this;
       me.removeComparator(removeBut);
       me.removeBoxStateChecker(removeBut,thisData);
     }
     function beta(e){ //set listener on check boxes//
-     console.log("Made it to set listeners on checkbox");
       var boxCheck = this;
       var checkData = $(this).parent().parent().parent().parent().html();
       var crazy = $(checkData).find(".check").attr("checked");
@@ -55,14 +101,12 @@ $("body").delegate("#back","click",function(e){
       var topRow = $(".size_check").eq(1).text();
       me.toggleBoxChecker(boxCheck,me);
       if(crazy === "checked"){
-        console.log("craaaazy",crazy);
        me.removeCompare(clickName);
      }else{me.rotate(checkData,me,thisData);
      }
    }
     $("body").delegate(".removeButton","click",alpha);
     $("body").delegate(".compareButton","click",function(e){ //set click listener on compare button//
-      console.log("Made it to comapare button listeneter");
       me.compareWhat(thisData,masterArr,me,alpha,beta);
     });
     $("body").delegate(".check","click",beta);
@@ -93,14 +137,12 @@ $("body").delegate("#back","click",function(e){
   };
 
   SubmitListener.prototype.toggleBoxChecker=function(boxCheck,me){
-    console.log("Made it to toggle boX Chcker");
     if ($(boxCheck).attr("checked") === "checked") {
         $(boxCheck).removeAttr("checked"); //setting attribute to keep track of checked/unchechekd boxes//
       }else{$(boxCheck).attr("checked","checked");
     }
   };
   SubmitListener.prototype.removeBoxStateChecker=function(removeBut,thisData){
-    console.log("made it box state checker");
     var parentDiv = $(removeBut).parent();
     var title = $(parentDiv).find(">:first-child").text();
     $(".check-size").each(function(){
@@ -189,8 +231,6 @@ SubmitListener.prototype.removeThird = function(checkData,thisData){
 };
 
 var CallYelp = function(searchTerm,currentAddress){
-  console.log("Made it to initial yelp call");
-  console.log(currentAddress);
   var me = this;
   function press(){
     // $("form").submit(function(e){
@@ -220,7 +260,6 @@ var CallYelp = function(searchTerm,currentAddress){
           var counter = -1 ;
           data.businesses.forEach(function(x){
             counter= counter+1;
-            console.log(counter);
             if (counter%3===0){
               x.isFourth = true;
             }else{
@@ -261,7 +300,6 @@ press(searchTerm,currentAddress);
 };//end of Call Yelp 1//
 var CallYelpBiz = function(id,me,compareArr,counter,alpha,beta){
  function press(id,me, compareArr,counter,alpha,beta){
-  console.log("idcheck",id);
   var callName = id.replace(/[^A-z]/gi,"");
   var request_data = {
     url:"http://api.yelp.com/v2/business/"+id,
@@ -335,6 +373,8 @@ CallYelp.prototype.checkText = function(){
     $(this).css("fontSize","14px");
   }});
 };
-Brady();
+var searchCounter = 0;
+Brady(searchCounter);
 
 });
+})();
