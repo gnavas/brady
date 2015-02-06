@@ -3,6 +3,7 @@
 $( document ).ready( function(){
 
   var Brady = function(){
+    console.log($("#previousSearchMenu").children());
     console.log("Made it to Brady");
     var me = this;
     var master = this;
@@ -10,7 +11,7 @@ $( document ).ready( function(){
      };
 
    Brady.prototype.startSearch = function(master){
-    master.SearchDropDownMenu = new SearchDropDownMenu();
+    master.searchDropDownMenu(master);
     var searchCounter = 0;
     var searchQuery = function(e){
       e.preventDefault();
@@ -19,14 +20,19 @@ $( document ).ready( function(){
       var currentAddress = $("#addr").val();
       console.log("@search",currentAddress);
       searchCounter ++;
-      master.callyelp = new CallYelp(searchTerm,currentAddress,master);
-      master.StoreData = new StoreData(searchTerm,currentAddress,searchCounter,master);
+      master.yelpSearch(searchTerm,currentAddress,master,searchCounter);
+};
 
-  };
-     $("form").submit(searchQuery); //initialize yelp call//
+  $("form").submit(searchQuery); //initialize yelp call//
     // this.submitlistener = new SubmitListener();//initializes event listeners//
    $("body").off("submit","form",searchQuery);
   };
+
+  Brady.prototype.yelpSearch = function(searchTerm,currentAddress,master,searchCounter) {
+      master.callyelp = new CallYelp(searchTerm,currentAddress,master);
+      master.StoreData = new StoreData(searchTerm,currentAddress,searchCounter,master);
+    };
+
 
   Brady.prototype.searchhomelistener = function(master,alpha,beta){
     console.log("Made it to Search Home Listener");
@@ -43,7 +49,9 @@ $( document ).ready( function(){
     // });
   };
 
-  var SearchDropDownMenu = function(){
+  Brady.prototype.searchDropDownMenu = function(master){
+    console.log("Made it to dropdown menu");
+    // console.log("master",master);
     var showDrop = function() {
     $("#previousSearchMenu").fadeIn(10);
     };
@@ -51,6 +59,20 @@ $( document ).ready( function(){
     $("#previousSearchMenu").fadeOut(500);
     };
     $(".dropdown").hover(showDrop,hideDrop);
+
+    ($("#previousSearchMenu").children()).on("click", function(e){
+      
+      searchPick = $(this).first().text();
+      searchPick = searchPick.split("+");
+      currentAddress = searchPick[1];
+      searchTerm = searchPick[0];
+      console.log(currentAddress);
+      console.log(searchTerm);
+      master.callyelp = new CallYelp(searchTerm,currentAddress,master);
+      console.log("searchdropdown",master);
+      // master.backToSearch(master);
+
+    });
 
   };
 
@@ -96,9 +118,13 @@ $( document ).ready( function(){
 };
 
 Brady.prototype.backToSearch = function(master){
-$("body").delegate("#back","click",function(e){
+  console.log("made it to backToSearch");
+  console.log("backto search what is master",master);
+$("body").delegate(".back","click",function(e){
   searchArrMaster = JSON.parse(localStorage.getItem("searchHistory"));
-  var searchFiveResults = searchArrMaster[4];
+  var z = searchArrMaster.length;
+  console.log("this is z",z);
+  var searchFiveResults = searchArrMaster[z-1];
   var searchFiveTerms = searchFiveResults[0];
   var searchTerm = searchFiveTerms[0];
   var currentAddress = searchFiveTerms[1];
@@ -106,11 +132,11 @@ $("body").delegate("#back","click",function(e){
   // console.log("@back",searchTerm);
   // console.log("@back",currentAddress);
 console.log("I just hit previous search button");
-$("body").off("click");
     });
 };
 
   var SubmitListener = function(thisData,masterArr,master){
+    console.log("Inside SubmitListener",master);
     var me = this; //enables me to reference SubmitListener below//
     function alpha(e){ //set click listener on remove button//
 
@@ -134,6 +160,8 @@ $("body").off("click");
     $("body").delegate(".compareButton","click",function(e){ //set click listener on compare button//
      console.log( "I just hit the compare button!!");
       me.compareWhat(thisData,masterArr,me,alpha,beta,master);
+      // master.backToSearch(master);
+      console.log("INsidec compare button listener",master);
     });
     $("body").delegate(".check","click",beta);
     $("#newSearch").on("click", function(e){
@@ -142,7 +170,6 @@ $("body").off("click");
   };
 
   SubmitListener.prototype.compareWhat = function(thisData,masterArr,me,alpha,beta,master){
-    $("body").off("click");
     var topLeft = $(".size_check").first().text();
     var topRight = $(".size_check").last().text();
     var topMiddle = $(".size_check").eq(1).text();
@@ -261,6 +288,7 @@ SubmitListener.prototype.removeThird = function(checkData,thisData){
 };
 
 var CallYelp = function(searchTerm,currentAddress,master){
+  $("body").off("click");
   var me = this;
   function press(searchTerm,currentAddress,master){
     // $("form").submit(function(e){
@@ -307,6 +335,8 @@ var CallYelp = function(searchTerm,currentAddress,master){
           $(".check:eq(2)").attr("checked","true");
           me.checkText();
           me.pushIds(data,me,master);
+          // master.backToSearch(master);
+          console.log("Inside yelp call",master);
           // me.submitlistener = new SubmitListener(data);
         }
     }); //end ajax call
@@ -325,17 +355,17 @@ var token = {
   public: "cPyTFWBrMwTrIp2rrUIz8l5lDNDrza5g",
   secret: "RK5dv-4Inlq-e5KQ6oaPUOiiIKg"
 };
-
+console.log("end of yelp call",master);
 press(searchTerm,currentAddress,master);  
 };//end of Call Yelp 1//
 
-
+                      
 
 var CallYelpBiz = function(id,me,compareArr,counter,alpha,beta,master){
  function press(id,me, compareArr,counter,alpha,beta){
   var callName = id.replace(/[^A-z]/gi,"");
   var request_data = {
-    url:"http://api.yelp.com/v2/business/"+id,
+    url: encodeURI("http://api.yelp.com/v2/business/"+id),
     method: "GET",
     data: {
       callback: callName,
@@ -351,16 +381,31 @@ var CallYelpBiz = function(id,me,compareArr,counter,alpha,beta,master){
     success: function (data) {
 
       compareArr.push(data);
+      console.log(counter);
       if (compareArr.length ===3) {
+        $("body").off("click");
+        master.backToSearch(master);
         compareArr[0].isNotThree = true;
         compareArr[1].isNotThree = true;
         compareArr[2].isThree = true;
-        me.compareFirst(data,compareArr);
-      $("body").off("click",".removeButton",alpha);
-      $("body").off("click",".check",beta);
-      master.backToSearch(master);
+      me.compareFirst(data,compareArr);
+      // master.backToSearch(master);
+      console.log("brady",master);
 
-      }}
+      }
+
+    },
+    // error: function(xhr, status, errorText){
+    //    if (counter===1) {
+    //     alert("API Error: Please replace your left selection");
+    //   }
+    //     if (counter===2){
+    //     alert("API Error: Please replace your middle selection");
+    //     }
+    //     if (counter===3){
+    //     alert("API Error: Please replace your right selection");
+    //     }
+    // }
     }); //end ajax call to yelpbiz 
 }
 
@@ -387,8 +432,10 @@ CallYelp.prototype.pushIds = function(data,me,master){
     masterArr.push(arr);
   });
 
+  console.log("Made it to yelp protoooo");
   me.submitlistener = new SubmitListener(data,masterArr,master);
-  console.log("master",master,"master");
+  console.log("master at the Submitlister INit push ids",master);
+  // master.backToSearch(master);
 };
 CallYelp.prototype.checkText = function(){
  $(".check-size").each(function(){
