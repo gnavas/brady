@@ -8,10 +8,11 @@ $( document ).ready( function(){
     var me = this;
     var master = this;
    this.startSearch(me,master);
+   this.searchDropDownMenu(master);
      };
 
    Brady.prototype.startSearch = function(master){
-    master.searchDropDownMenu(master);
+    // master.searchDropDownMenu(master);
     var searchCounter = 0;
     var searchQuery = function(e){
       e.preventDefault();
@@ -145,6 +146,7 @@ console.log("I just hit previous search button");
       me.removeBoxStateChecker(removeBut,thisData);
     }
     function beta(e){ //set listener on check boxes//
+      console.log("made it to checkbox listener");
       var boxCheck = this;
       var checkData = $(this).parent().parent().parent().parent().html();
       var crazy = $(checkData).find(".check").attr("checked");
@@ -292,6 +294,7 @@ console.log("made it to removethird");
 
 var CallYelp = function(searchTerm,currentAddress,master){
   $("body").off("click");
+  // $("li").off("click");
   var me = this;
   function press(searchTerm,currentAddress,master){
     // $("form").submit(function(e){
