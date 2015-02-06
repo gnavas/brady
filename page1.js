@@ -218,6 +218,7 @@ console.log("I just hit previous search button");
   };
   
   SubmitListener.prototype.removeCompare= function (clickName){
+    console.log("made it to removeCompare");
     var topLeft = $(".size_check").first().text();
     var topRight = $(".size_check").last().text();
     var topMiddle = $(".size_check").eq(1).text();
@@ -236,6 +237,7 @@ console.log("I just hit previous search button");
  };
 
  SubmitListener.prototype.rotate = function(checkData,me,thisData){
+  console.log("made it to the rotator");
   var changeFirst = $("#first");
   var changeSecond = $("#second");
   var changeThird = $("#third");
@@ -273,6 +275,7 @@ console.log("I just hit previous search button");
 };
 
 SubmitListener.prototype.removeThird = function(checkData,thisData){
+console.log("made it to removethird");
 
   var topRight = $(".size_check").last().text();
   var clickName = $('p');
