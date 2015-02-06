@@ -26,16 +26,16 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
-          <li><a style = "color:white;" href="#">Favorites</a></li>
+          <li><a id = "newSearch" style = "color:white;" href="#">Search Home</a></li>
           <li><a style = "color:white;" href="#">Wish List</a></li>
           <li class="dropdown">
-            <a id = "dropdown" style="color:white;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Dropdown <span class="caret"></span></a>
+            <a id = "dropdown" style="color:white;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="true">Search History <span class="caret"></span></a>
             <ul id = "previousSearchMenu" class="dropdown-menu">
-              <li><a id ="search1" href="#">Search5</a></li>
-              <li><a id ="search2" href="#">Search4</a></li>
-              <li><a id ="search3"href="#">Search3</a></li>
-              <li><a id ="search4"href="#">Search2</a></li>
-              <li><a id ="search5"href="#">Search1</a></li>
+              <li><a id ="search1" href="#"></a></li>
+              <li><a id ="search2" href="#"></a></li>
+              <li><a id ="search3"href="#"></a></li>
+              <li><a id ="search4"href="#"></a></li>
+              <li><a id ="search5"href="#"></a></li>
             </ul>
           </li>
         </ul>
@@ -43,6 +43,7 @@
     </div>
   </nav>
   <div id = "searchPage" class="container-fluid">
+      <div id = "homePage">
       <div class="row well well-large"  style = "margin-top:50px;">
             <form  id "searchForm" background-color:silver;>
               <div>
@@ -59,6 +60,7 @@
           </form>
         </div>
       </div>
+     </div> 
   </div>
 
   <script id="replace-template" type="text/x-handlebars-template">

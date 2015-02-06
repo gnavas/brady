@@ -2,24 +2,45 @@
 
 $( document ).ready( function(){
 
-  var Brady = function(searchCounter){
-    var me = Brady;
-    me.SearchDropDownMenu = new SearchDropDownMenu();
-    if (searchCounter >5) {
-      searchCounter = 0;
-    }
-     $("form").submit(function(e){
+  var Brady = function(){
+    console.log("Made it to Brady");
+    var me = this;
+    var master = this;
+   this.startSearch(me,master);
+     };
+
+   Brady.prototype.startSearch = function(master){
+    master.SearchDropDownMenu = new SearchDropDownMenu();
+    var searchCounter = 0;
+    var searchQuery = function(e){
       e.preventDefault();
       var searchTerm = $("#rest").val();
-      console.log("searchTerm",searchTerm);
+      console.log("@search",searchTerm);
       var currentAddress = $("#addr").val();
-      console.log("currentAddress",currentAddress);
+      console.log("@search",currentAddress);
       searchCounter ++;
-      me.callyelp = new CallYelp(searchTerm,currentAddress);
-      me.StoreData = new StoreData(searchTerm,currentAddress,me,searchCounter);
+      master.callyelp = new CallYelp(searchTerm,currentAddress,master);
+      master.StoreData = new StoreData(searchTerm,currentAddress,searchCounter,master);
 
-    }); //initialize yelp call//
+  };
+     $("form").submit(searchQuery); //initialize yelp call//
     // this.submitlistener = new SubmitListener();//initializes event listeners//
+   $("body").off("submit","form",searchQuery);
+  };
+
+  Brady.prototype.searchhomelistener = function(master,alpha,beta){
+    console.log("Made it to Search Home Listener");
+    $("#searchPage").html(homePage);
+    // $("#newSearch").on("click", function(e){
+    // $("#searchPage").html(homePage);
+    $("body").off("click",".removeButton",alpha);
+    $("body").off("click",".check",beta);
+    $("#newSearch").off("click");
+    // $("body").off("click","#newSearch",function(e){
+    // master.searchhomelistener(master,alpha,beta); 
+    // });
+    master.startSearch(master);
+    // });
   };
 
   var SearchDropDownMenu = function(){
@@ -33,19 +54,17 @@ $( document ).ready( function(){
 
   };
 
- var StoreData = function(searchTerm,currentAddress,me,searchCounter){
+ var StoreData = function(searchTerm,currentAddress,searchCounter,master){
 
   var local = function(searchTerm,currentAddress){
   searchArr =[];
   searchArr.push([searchTerm,currentAddress]);
-  console.log("searchArr",searchArr);
   searchArrMaster = JSON.parse(localStorage.getItem("searchHistory"));
-  if(searchArrMaster.length === 5){
+  if((searchArrMaster.length === 5) && (searchCounter>0)){
   searchArrMaster.shift();
   }
   searchArrMaster.push(searchArr);
   localStorage.setItem("searchHistory", JSON.stringify(searchArrMaster));
-  console.log("searchArrMaster",searchArrMaster);
   var searchOneResults = searchArrMaster[0];
   var searchOneTerms = searchOneResults[0];
   $("#search1").text(searchOneTerms[0]+" + "+searchOneTerms[1]);
@@ -64,7 +83,6 @@ $( document ).ready( function(){
 
 };
   if (localStorage.getItem("searchHistory") === null) {
-    console.log("I like dogs");
   var searchArrMaster = [];
   localStorage.setItem("searchHistory", JSON.stringify(searchArrMaster));
   local(searchTerm,currentAddress);
@@ -73,19 +91,26 @@ $( document ).ready( function(){
 }
 }
 
-  this.backToSearch(searchTerm,currentAddress,me);
+  // master.backToSearch(master);
 
 };
 
-StoreData.prototype.backToSearch = function(searchTerm,currentAddress,me){
+Brady.prototype.backToSearch = function(master){
 $("body").delegate("#back","click",function(e){
-      console.log("Made it to click back");
-      me.callyelp = new CallYelp(searchTerm,currentAddress);
-
+  searchArrMaster = JSON.parse(localStorage.getItem("searchHistory"));
+  var searchFiveResults = searchArrMaster[4];
+  var searchFiveTerms = searchFiveResults[0];
+  var searchTerm = searchFiveTerms[0];
+  var currentAddress = searchFiveTerms[1];
+  master.callyelp = new CallYelp(searchTerm,currentAddress,master);
+  // console.log("@back",searchTerm);
+  // console.log("@back",currentAddress);
+console.log("I just hit previous search button");
+$("body").off("click");
     });
 };
 
-  var SubmitListener = function(thisData,masterArr){
+  var SubmitListener = function(thisData,masterArr,master){
     var me = this; //enables me to reference SubmitListener below//
     function alpha(e){ //set click listener on remove button//
 
@@ -107,12 +132,17 @@ $("body").delegate("#back","click",function(e){
    }
     $("body").delegate(".removeButton","click",alpha);
     $("body").delegate(".compareButton","click",function(e){ //set click listener on compare button//
-      me.compareWhat(thisData,masterArr,me,alpha,beta);
+     console.log( "I just hit the compare button!!");
+      me.compareWhat(thisData,masterArr,me,alpha,beta,master);
     });
     $("body").delegate(".check","click",beta);
+    $("#newSearch").on("click", function(e){
+    master.searchhomelistener(master,alpha,beta); 
+    });
   };
 
-  SubmitListener.prototype.compareWhat = function(thisData,masterArr,me,alpha,beta){
+  SubmitListener.prototype.compareWhat = function(thisData,masterArr,me,alpha,beta,master){
+    $("body").off("click");
     var topLeft = $(".size_check").first().text();
     var topRight = $(".size_check").last().text();
     var topMiddle = $(".size_check").eq(1).text();
@@ -123,7 +153,7 @@ $("body").delegate("#back","click",function(e){
       if((x[0] === topLeft) || (x[0]=== topRight) || (x[0]===topMiddle)){
         var id = x[1];
         counter++; 
-        me.callyelpbiz = new CallYelpBiz(id,me,compareArr,counter,alpha,beta);
+        me.callyelpbiz = new CallYelpBiz(id,me,compareArr,counter,alpha,beta,master);
       }
     });
 
@@ -230,9 +260,9 @@ SubmitListener.prototype.removeThird = function(checkData,thisData){
   });
 };
 
-var CallYelp = function(searchTerm,currentAddress){
+var CallYelp = function(searchTerm,currentAddress,master){
   var me = this;
-  function press(){
+  function press(searchTerm,currentAddress,master){
     // $("form").submit(function(e){
     //   e.preventDefault();
     //   var searchTerm = $("#rest").val();
@@ -276,7 +306,7 @@ var CallYelp = function(searchTerm,currentAddress){
           $(".check:eq(1)").attr("checked","true");
           $(".check:eq(2)").attr("checked","true");
           me.checkText();
-          me.pushIds(data,me);
+          me.pushIds(data,me,master);
           // me.submitlistener = new SubmitListener(data);
         }
     }); //end ajax call
@@ -296,9 +326,12 @@ var token = {
   secret: "RK5dv-4Inlq-e5KQ6oaPUOiiIKg"
 };
 
-press(searchTerm,currentAddress);  
+press(searchTerm,currentAddress,master);  
 };//end of Call Yelp 1//
-var CallYelpBiz = function(id,me,compareArr,counter,alpha,beta){
+
+
+
+var CallYelpBiz = function(id,me,compareArr,counter,alpha,beta,master){
  function press(id,me, compareArr,counter,alpha,beta){
   var callName = id.replace(/[^A-z]/gi,"");
   var request_data = {
@@ -325,6 +358,7 @@ var CallYelpBiz = function(id,me,compareArr,counter,alpha,beta){
         me.compareFirst(data,compareArr);
       $("body").off("click",".removeButton",alpha);
       $("body").off("click",".check",beta);
+      master.backToSearch(master);
 
       }}
     }); //end ajax call to yelpbiz 
@@ -346,14 +380,15 @@ var token = {
 press(id,me,compareArr,counter,alpha,beta);  
 };//end of yelpbiz call//
 
-CallYelp.prototype.pushIds = function(data,me){
+CallYelp.prototype.pushIds = function(data,me,master){
   var masterArr = [];
   data.businesses.forEach(function(x){
     var arr=[x.name,x.id];
     masterArr.push(arr);
   });
 
-  me.submitlistener = new SubmitListener(data,masterArr);
+  me.submitlistener = new SubmitListener(data,masterArr,master);
+  console.log("master",master,"master");
 };
 CallYelp.prototype.checkText = function(){
  $(".check-size").each(function(){
@@ -373,8 +408,8 @@ CallYelp.prototype.checkText = function(){
     $(this).css("fontSize","14px");
   }});
 };
-var searchCounter = 0;
-Brady(searchCounter);
+new Brady();
+var homePage = $("#homePage").html();
 
 });
 })();
